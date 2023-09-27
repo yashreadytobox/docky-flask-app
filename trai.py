@@ -1,5 +1,10 @@
-net = jetson.inference.segNet("fcn-resnet18-mhp-512x320")
-camera = jetson.utils.gstCamera(2560,720,"/dev/video3")
+import cv2
+import numpy as np
+import jetson.inference
+import jetson.utils
+
+net = jetson.inference.segNet("fcn-resnet18-Cityscapes-512x256")
+camera = jetson.utils.gstCamera(2560,720,"/dev/video0")
 display = jetson.utils.glDisplay()
 net.SetOverlayAlpha(150)
 
