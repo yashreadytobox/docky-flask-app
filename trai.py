@@ -16,10 +16,15 @@ while True:
     frame = jetson.utils.cudaToNumpy (cuda_frame, width, height, 4)
     lo=np.array([0,0,0,255])
     hi=np.array([255,255,255,255])
-    mask=cv2.inRange(frame,lo,hi)
-    frame[mask>0] = (255,255,255,255)
-    cv2.cvtColor(frame.astype (np.uint8), cv2.COLOR_RGBA2RGB)
-    cv2.imshow("frame", frame)
+    
+    cuda_mask = jetson.utils.cudaAllocMapped(width=512, height=320, format=frame.format)
+    net.Mask(cuda_mask, filter_mode=opt.filter_mode)
+    mask = jetson.utils.cudaToNumpy(cuda_mask)
+    
+    #mask=cv2.inRange(frame,lo,hi)
+    #frame[mask>0] = (255,255,255,255)
+    #cv2.cvtColor(frame.astype (np.uint8), cv2.COLOR_RGBA2RGB)
+    cv2.imshow("frame", mask)
     # Hit 'q' on the keyboard to quit!
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
